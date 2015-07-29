@@ -1,0 +1,2 @@
+[wordpress-server]
+172.28.128.5    ansible_connection=ssh        ansible_ssh_user=root

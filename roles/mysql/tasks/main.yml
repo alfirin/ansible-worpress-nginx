@@ -1,0 +1,36 @@
+---
+- name: Install Mysql package
+  yum: name={{ item }} state=present
+  with_items:
+    - mariadb
+    - mariadb-server
+    - MySQL-python
+    - libsemanage-python
+   #- mysql-server
+   #- MySQL-python
+   #- libselinux-python
+   #- libsemanage-python
+
+- name: Configure SELinux to start mysql on any port
+  seboolean: name=mysql_connect_any state=true persistent=yes
+  when: ansible_selinux.status == "enabled"
+
+#- name: Create Mariadb log directory
+#  file: path=/var/log state=directory mode=0755
+
+#- name: Create Mariadb log file
+#  file: path=/var/log/mysqld.log state=touch owner=mysql group=mysql mode=0644
+
+#- name: Create Mariadb run directory
+#  file: path=/var/run/mysqld state=directory owner=mysql group=mysql mode=0677
+
+#- name: Create Mariadb run file
+#  file: path=/var/run/mysqld/mysqld.pid state=touch owner=mysql group=mysql mode=0777
+
+#- name: Create Mysql configuration file
+#  template: src=my.cnf.j2 dest=/etc/my.cnf
+#  notify:
+#  - restart mariadb
+
+- name: Start Mysql Service
+  service: name=mariadb state=started enabled=yes
